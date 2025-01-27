@@ -18,15 +18,14 @@ flowchart TD
   E--> |no|H{¿Poner bandera?}
   
   G--> D 
-  F--> |no|I[Revelar la casilla]
+  F--> |no|D
   
-  H--> |no|I
+  H--> |no|I[Revelar la casilla]
   H--> |si|J[Poner bandera]
   J--> D
   I--> L{¿Es una mina?} 
   L--> |si|O([Fin])
   L--> |no|D
-
 ```
 
 
