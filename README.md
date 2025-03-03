@@ -14,6 +14,7 @@
 
 
 ## Introducción
+¿Alguna vez se han preguntado como estan hechos aquellos videojuegos que marcaron nuestra infancia? En este proyecto se recreo el clásico juego de _buscaminas_ desde cero. 
 
 ## Abordaje del problema
 
