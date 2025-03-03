@@ -1,16 +1,14 @@
 import random
 import os
+import time
+import threading
+
+# Variable global que indica si el tiempo se agotó
+tiempo_finalizado = False
 
 def crear_tablero(filas, columnas):
     '''
     Crea un tablero de juego con las dimensiones especificadas.
-
-    Args:
-        filas (int): El número de filas del tablero.
-        columnas (int): El número de columnas del tablero.
-
-    Returns:
-        list: Una lista de listas que representa el tablero de juego.
     '''
     tablero = [['*' for _ in range(columnas)] for _ in range(filas)]
     return tablero
@@ -18,9 +16,6 @@ def crear_tablero(filas, columnas):
 def mostrar_tablero(tablero):
     '''
     Muestra el tablero de juego en la consola.
-
-    Args:
-        tablero (list): La lista de listas que representa el tablero de juego.
     '''
     filas, columnas = len(tablero), len(tablero[0])
     espacio = 3  # Ancho de cada celda
@@ -37,14 +32,6 @@ def mostrar_tablero(tablero):
 def crear_minas(filas, columnas, dificultad):
     '''
     Crea el tablero de minas según la dificultad especificada.
-
-    Args:
-        filas (int): Número de filas.
-        columnas (int): Número de columnas.
-        dificultad (float): Nivel de dificultad.
-
-    Returns:
-        list: Una lista de listas con 1 donde hay minas y 0 donde no.
     '''
     match dificultad:
         case 1.0:
@@ -60,12 +47,6 @@ def crear_minas(filas, columnas, dificultad):
 def calcular_fondo(minas):
     '''
     Calcula el fondo del tablero según la posición y número de minas adyacentes.
-
-    Args:
-        minas (list): Lista de listas con 1 donde hay mina y 0 en caso contrario.
-
-    Returns:
-        list: Una lista de listas que representa el fondo cubierto.
     '''
     filas, columnas = len(minas), len(minas[0])
     fondo = [[0 for _ in range(columnas)] for _ in range(filas)]
@@ -84,25 +65,15 @@ def revelar_ceros(tablero, fondo, fila, columna, visitados=None):
     """
     Revela todas las celdas conectadas que tengan 0 y, además, las adyacentes
     con números. Se utiliza recursividad para recorrer las celdas adyacentes.
-
-    Args:
-        tablero (list): Tablero visible al jugador.
-        fondo (list): Tablero con los valores y minas.
-        fila (int): Fila de la celda seleccionada.
-        columna (int): Columna de la celda seleccionada.
-        visitados (list, opcional): Lista de celdas ya visitadas para evitar repeticiones.
     """
     if visitados is None:
         visitados = []
-    # Verificar límites y si ya se visitó la celda
     if fila < 0 or fila >= len(fondo) or columna < 0 or columna >= len(fondo[0]):
         return
     if (fila, columna) in visitados:
         return
     visitados.append((fila, columna))
-    # Revelar la celda actual
     tablero[fila][columna] = str(fondo[fila][columna])
-    # Si la celda es 0, se revelan las adyacentes
     if fondo[fila][columna] == 0:
         for i in range(max(0, fila-1), min(len(fondo), fila+2)):
             for j in range(max(0, columna-1), min(len(fondo[0]), columna+2)):
@@ -113,17 +84,20 @@ def jugar(tablero, fondo, minas, dificultad):
     '''
     Función principal para jugar al buscaminas.
     Verifica si el jugador pisa una mina o revela una celda con 0 que expande su área.
-
-    Args:
-        tablero (list): Tablero visible al jugador.
-        fondo (list): Tablero con los valores y minas.
-        minas (list): Distribución de minas.
     '''
+    global tiempo_finalizado
     primera_vez = True
     while True:
+        # Si el tiempo se agotó, se finaliza el juego
+        if tiempo_finalizado:
+            print("\n¡Tiempo agotado! Fin del juego.")
+            puntuacion = calcular_puntuación(tablero, dificultad)
+            print("Puntuación obtenida en esta partida:", int(puntuacion))
+            break
+
         try:
-            fila = int(input("Introduce la fila: "))
-            columna = int(input("Introduce la columna: "))
+            fila = int(input("Introduce la fila:\n"))
+            columna = int(input("Introduce la columna:\n"))
         except ValueError:
             print("Por favor, introduce un número válido.")
             continue
@@ -132,10 +106,8 @@ def jugar(tablero, fondo, minas, dificultad):
             print("Coordenadas fuera de los límites del tablero.")
             continue
 
-        respuesta = input(
-            "¿Colocar una bandera en esta coordenada? (sí/no): "
-        ).strip().lower()
-        if respuesta == 'sí' or respuesta == 'si':
+        respuesta = input("¿Colocar una bandera en esta coordenada? (sí/no):\n").strip().lower()
+        if respuesta in ('sí', 'si'):
             limpiar_consola()
             tablero[fila][columna] = '?'
             mostrar_tablero(tablero)
@@ -147,7 +119,7 @@ def jugar(tablero, fondo, minas, dificultad):
             tablero[fila][columna] = 'X'
             mostrar_tablero(tablero)
             puntuacion = calcular_puntuación(tablero, dificultad)
-            print("Puntuación obtenida en esta partida : ",int(puntuacion))
+            print("Puntuación obtenida en esta partida:", int(puntuacion))
             break
         elif fondo[fila][columna] == 'X' and primera_vez:
             limpiar_consola()
@@ -157,14 +129,12 @@ def jugar(tablero, fondo, minas, dificultad):
                     if fondo[k][l] != 'X':
                         fondo[k][l] -= 1
             fondo[fila][columna] = 0  # Se elimina la mina de la celda inicial
-            # Se llama a revelar_ceros para expandir el área de ceros
             revelar_ceros(tablero, fondo, fila, columna)
             mostrar_tablero(tablero)
             primera_vez = False
             print("Sigue jugando.")
         else:
             limpiar_consola()
-            # Si la celda es 0, se revelan las celdas conectadas; en otro caso, solo se revela la celda.
             if fondo[fila][columna] == 0:
                 revelar_ceros(tablero, fondo, fila, columna)
             else:
@@ -173,13 +143,14 @@ def jugar(tablero, fondo, minas, dificultad):
             print("Sigue jugando.")
 
         # Verificar si el jugador ha ganado
-        celdas_descubiertas = sum(1 for row in tablero for cell in row if cell != '*' and cell != 'X' and cell != '?')
+        celdas_descubiertas = sum(1 for row in tablero for cell in row if cell not in ('*', 'X', '?'))
         celdas_no_minas = sum(1 for row in fondo for cell in row if cell != 'X')
         if celdas_descubiertas == celdas_no_minas:
             print("¡Has ganado el juego!")
             puntuacion = calcular_puntuación(tablero, dificultad)
-            print("Puntuación obtenida en esta partida : ",int(puntuacion))
+            print("Puntuación obtenida en esta partida:", int(puntuacion))
             break
+
         primera_vez = False
 
 def calcular_puntuación(tablero, dificultad):
@@ -187,25 +158,43 @@ def calcular_puntuación(tablero, dificultad):
     puntuacion = 0
     for i in range(filas):
         for j in range(columnas):
-            if (tablero[i][j] != '*' and tablero[i][j] != 'X'):
+            if tablero[i][j] not in ('*', 'X'):
                 puntuacion += 1
-            if(tablero[i][j] == 'X'):
+            if tablero[i][j] == 'X':
                 puntuacion -= 5
-    puntuacion*=dificultad
+    puntuacion *= dificultad
     return puntuacion
 
-
 def limpiar_consola():
-    if os.name == 'nt':  #Para Windows
+    if os.name == 'nt':  # Para Windows
         os.system('cls')
-    else:  #Para Linux y otros sistemas operativos
+    else:  # Para Linux y otros sistemas operativos
         os.system('clear')
+
+def timer_thread(duracion):
+    '''
+    Función que muestra la cuenta regresiva del tiempo restante.
+    
+    Args:
+        duracion (int): Tiempo total de la partida en segundos.
+    '''
+    global tiempo_finalizado
+    for i in range(duracion, 0, -5):
+        if i == duracion:
+            time.sleep(1)
+            print(f"{'Tiempo restante: ':<35}{duracion:>5} segundos", end="\r")
+        else:
+            print(f"{'Tiempo restante: ':<35}{duracion:>5} segundos", end="\r")
+            time.sleep(5)
+    tiempo_finalizado = True
+    print(f"{'Tiempo restante: ':<35} 0 segundos")
 
 def main():
     '''
     Función principal del juego.
-    Solicita al usuario las dimensiones y dificultad, y arranca la partida.
+    Solicita al usuario las dimensiones, dificultad y duración, inicia la cuenta regresiva y arranca la partida.
     '''
+    global tiempo_finalizado
     try:
         filas = int(input("Introduce el número de filas: "))
         columnas = int(input("Introduce el número de columnas: "))
@@ -216,6 +205,13 @@ def main():
 
     tablero = crear_tablero(filas, columnas)
     mostrar_tablero(tablero)
+
+    duracion = len(tablero)*len(tablero[0])*5  # Duración en segundos basada en el tamaño del tablero
+    print(f"La duración de la partida será de {duracion} segundos.")
+    # Iniciar el hilo del timer (daemon para que se detenga al finalizar el programa)
+    timer = threading.Thread(target=timer_thread, args=(duracion,), daemon=True)
+    timer.start()
+
     minas = crear_minas(filas, columnas, dificultad)
     fondo = calcular_fondo(minas)
     jugar(tablero, fondo, minas, dificultad)
