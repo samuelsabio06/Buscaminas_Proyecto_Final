@@ -30,6 +30,8 @@ Realizamos el codigo para la ejecucion de un buscaminas por medio de la consola,
 ## Instalación del programa
 
 ## Conclusiones
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+
 
 
 
