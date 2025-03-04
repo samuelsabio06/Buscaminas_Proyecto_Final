@@ -3,6 +3,7 @@
   - [Introducción](#introducción)
   - [Abordaje del problema](#abordaje-del-problema)
   - [Solución del problema](#solución-del-problema)
+  - [Función foco](#función-foco)
   - [Instalacion del programa](#instalación-del-programa)
   - [Conclusiones](#conclusiones)
 
@@ -14,20 +15,51 @@
 
 
 ## Introducción
-¿Alguna vez se han preguntado como estan hechos aquellos videojuegos que marcaron nuestra infancia? En este proyecto se recreo el clásico juego de _buscaminas_ desde cero. 
-
+El **buscaminas** ha sido una fuente de entretenimiento que ha marcado varias generaciones. En este repositorio se dará a conocer el proceso y desarrollo de una versión funcional que sea fiel a las reglas basicas del buscaminas original. El funcionamiento del codigo esta sustentado en algoritmos que permiten funcionalidades como la creacion de un tablero, distribución de minas, o gestión de interacciones del jugador.
 ## Abordaje del problema
-El problema consiste en crear un codigo que emule un buscaminas, y que cumpla que:
-  - Sea un codigo original
-  - Se use lo visto en clase
+El problema consiste en crear un código que emule un **buscaminas**, y que además cumpla con las siguientes condiciones:
+  - Código original
+  - Aborde temas aprendidos en clase
   - Tenga 3 niveles de dificultad
   - Se dibuje la matriz en la consola
   - Se interactue por medio de coordenadas
     
-Adicionalmente se nos permitia que el proyecto llevara ciertos extras, como la cuenta regresiva y el conteo de puntos.
+Adicionalmente se nos permitia que el proyecto llevara ciertos **extras**, como la cuenta regresiva y el conteo de puntos.
 ## Solución del problema
-Realizamos el codigo para la ejecucion de un buscaminas por medio de la consola, esto fue posible gracias al uso de librerias como random y os las cuales nos ayudan a generar numeros aleatoreos para llenar el campo de juego, adicional a esto usamos funciones dedicadas a aspectos diferentes del juego, como crear el tablero, crear minas y calcular la puntuacion; y una funcion principal para iniciar el juego.
+A grandes rasgos, el código se realizo de manera que se pueda jugar el clásico buscaminas por medio de la consola. En primer lugar, se usaron librerias como ```random```  que hizo posible generar numeros aleatorios para llenar el campo de juego. Por otro lado fue indispensable el uso de ciclos ```for``` para la creación de funciones dedicadas diferentes aspectos del juego, como crear el tablero, crear minas y o revelar las fronteras; y una funcion principal para iniciar el juego.
+
+- Funcionamiento general del código:
+  ```mermaid
+  flowchart TD
+
+
+  id1([Inicio]) ==> B[Solicitar datos: Número de filas, columnas y dificultad]
+  B==> C[Solicitar coordenada]
+  C ==> D{¿Poner bandera?}
+  D ==>|si|f[Colocar bandera] ==>C 
+  D ==> |no|E[Revelar casilla]
+  E ==> G{¿Es una mina?}
+  G ==> |si|H([Fin])
+  G ==> |no|I{¿Quedan casillas sin minar?}
+  I ==> |no|H
+  I ==> |si|C
+  
+  style id1 stroke:#0F0,stroke-width:4px
+  style H stroke:#0F0,stroke-width:4px
+  style D stroke:#00f,stroke-width:4px
+  style G stroke:#00f,stroke-width:4px
+  style I stroke:#00f,stroke-width:4px
+
+  ```
+
+## Función foco
+
+Una de las funciones principales de este código es la función que se encarga de revelar las fronteras del tablero, es decir, al revelar una casilla con un cero (no tiene minas alrededor), automaticamente se van a seguir liberando las casillas que también contengan un cero.
+
+
+
 ## Instalación del programa
+
 
 ## Conclusiones
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
