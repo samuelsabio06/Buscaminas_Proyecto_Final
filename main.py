@@ -182,12 +182,12 @@ def timer_thread(duracion):
     for i in range(duracion, 0, -5):
         if i == duracion:
             time.sleep(1)
-            print(f"{'Tiempo restante: ':<35}{duracion:>5} segundos", end="\r")
+            print(f"{'Tiempo restante: ':>35}{duracion} segundos", end="\r")
         else:
-            print(f"{'Tiempo restante: ':<35}{duracion:>5} segundos", end="\r")
+            print(f"{'Tiempo restante: ':>35}{i} segundos", end="\r")
             time.sleep(5)
     tiempo_finalizado = True
-    print(f"{'Tiempo restante: ':<35} 0 segundos")
+    print(f"{'Tiempo restante: ':>35} 0 segundos")
 
 def main():
     '''
