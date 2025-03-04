@@ -1,11 +1,13 @@
 '''
 Módulo de logica del buscaminas.
 
-Este modulo contiene las funciones necesarias para implementar la lógica del juego
+Contiene las funciones necesarias para implementar la lógica del juego
 '''
 
 import random
-from extras import calcular_puntuación, limpiar_consola
+from extras import calcular_puntuación, limpiar_consola, timer_thread
+
+tiempo_finalizado = False
 
 def crear_tablero(filas, columnas):
     '''
@@ -66,7 +68,9 @@ def crear_minas(filas, columnas, dificultad):
         case 3.0:
             dificultad = 0.25
 
-    minas = [[1 if random.random() < dificultad else 0 for _ in range(columnas)] for _ in range(filas)]
+    minas = [[1 if random.random() < dificultad else 0 
+          for _ in range(columnas)] 
+         for _ in range(filas)]
     return minas
 
 
@@ -159,7 +163,8 @@ def jugar(tablero, fondo, minas, dificultad):
             print("Coordenadas fuera de los límites del tablero.")
             continue
 
-        respuesta = input("¿Colocar una bandera en esta coordenada? (sí/no):\n").strip().lower()
+        respuesta = input("¿Colocar una bandera en esta coordenada? (sí/no):\n"
+            ).strip().lower()
         if respuesta in ('sí', 'si'):
             limpiar_consola()
             tablero[fila][columna] = '?'
@@ -196,7 +201,8 @@ def jugar(tablero, fondo, minas, dificultad):
             print("Sigue jugando.")
 
         # Verificar si el jugador ha ganado
-        celdas_descubiertas = sum(1 for row in tablero for cell in row if cell not in ('*', 'X', '?'))
+        celdas_descubiertas = sum(1 for row in tablero 
+            for cell in row if cell not in ('*', 'X', '?'))
         celdas_no_minas = sum(1 for row in fondo for cell in row if cell != 'X')
         if celdas_descubiertas == celdas_no_minas:
             print("¡Has ganado el juego!")
