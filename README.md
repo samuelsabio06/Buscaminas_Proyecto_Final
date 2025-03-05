@@ -1,4 +1,7 @@
 # Buscaminas: Proyecto Final
+Demo del juego buscaminas en terminal usando python.
+[![asciicast](https://asciinema.org/a/706504.svg)](https://asciinema.org/a/706504)
+
 ## Tabla de contenidos
   - [Introducción](#introducción)
   - [Abordaje del problema](#abordaje-del-problema)
@@ -6,13 +9,6 @@
   - [Función foco](#función-foco)
   - [Instalacion del programa](#instalación-del-programa)
   - [Conclusiones](#conclusiones)
-
-
-
-
-
-
-
 
 ## Introducción
 El **buscaminas** ha sido una fuente de entretenimiento que ha marcado varias generaciones. En este repositorio se dará a conocer el proceso y desarrollo de una versión funcional que sea fiel a las reglas basicas del buscaminas original. El funcionamiento del codigo esta sustentado en algoritmos que permiten funcionalidades como la creacion de un tablero, distribución de minas, o gestión de interacciones del jugador.
