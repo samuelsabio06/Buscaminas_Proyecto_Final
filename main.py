@@ -22,7 +22,7 @@ def main():
     tablero = crear_tablero(filas, columnas)
     mostrar_tablero(tablero)
 
-    duracion = len(tablero)*len(tablero[0])*5  # Duración en segundos basada en el tamaño del tablero
+    duracion = len(tablero)*len(tablero[0])*8  # Duración en segundos basada en el tamaño del tablero
     print(f"La duración de la partida será de {duracion} segundos.")
     # Iniciar el hilo del timer (daemon para que se detenga al finalizar el programa)
     timer = threading.Thread(target=timer_thread, args=(duracion,), daemon=True)
