@@ -59,9 +59,15 @@ Una de las funciones principales de este código es la función que se encarga d
 
 
 ## Instalación del programa
+Requires Python 3.x or later.
 
+```sh
+git clone https://github.com/samuelsabio06/Buscaminas_Proyecto_Final.git
+cd Buscaminas_Proyecto_Final
+python main.py
+```
 
-## Conclusiones
+## Proximos pasos (Mejoras)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 
 
