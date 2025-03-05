@@ -7,7 +7,6 @@ y jugabilidad del buscaminas
 
 import os
 import time
-import threading
 
 def calcular_puntuación(tablero, dificultad):
     '''

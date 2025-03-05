@@ -1,9 +1,9 @@
 '''
 Módulo con la funcion principal del juego
 '''
-import time
 import threading
-import funciones
+from funciones import crear_tablero, mostrar_tablero, crear_minas, calcular_fondo, jugar
+from extras import timer_thread
 
 def main():
     '''

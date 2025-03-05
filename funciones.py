@@ -5,7 +5,7 @@ Contiene las funciones necesarias para implementar la lógica del juego
 '''
 
 import random
-from extras import calcular_puntuación, limpiar_consola, timer_thread
+from extras import calcular_puntuación, limpiar_consola
 
 tiempo_finalizado = False
 
