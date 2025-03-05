@@ -112,19 +112,24 @@ def revelar_ceros(tablero, fondo, fila, columna, visitados=None):
     Retorno:
     None
     """
+    # Si es la primera vez que se llama a la funcion, se inicializa una lista (vacía)
     if visitados is None:
         visitados = []
+    # Verificar que la coordenada este dentro de los limites del tablero
     if fila < 0 or fila >= len(fondo) or columna < 0 or columna >= len(fondo[0]):
         return
+    # Si la coordenada ya se visitó, no se vuelve a procesar
     if (fila, columna) in visitados:
         return
+    # Se añade la coordenada de la celda a la lista, para evitar un bucle infinito
     visitados.append((fila, columna))
     tablero[fila][columna] = str(fondo[fila][columna])
+    # Si la casilla es un 0, se procesan las celdas alrededor
     if fondo[fila][columna] == 0:
         for i in range(max(0, fila-1), min(len(fondo), fila+2)):
             for j in range(max(0, columna-1), min(len(fondo[0]), columna+2)):
                 if (i, j) not in visitados:
-                    revelar_ceros(tablero, fondo, i, j, visitados)
+                    revelar_ceros(tablero, fondo, i, j, visitados) #Se vuelve a llamar la funcion para celdas adyacentes
 
 
 def jugar(tablero, fondo, minas, dificultad):
