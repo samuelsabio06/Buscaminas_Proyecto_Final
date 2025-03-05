@@ -1,3 +1,12 @@
+---
+<div align="center">
+
+# **CodesBusters**
+---
+
+</div>
+
+
 # Buscaminas: Proyecto Final
 
 ## Tabla de contenidos
