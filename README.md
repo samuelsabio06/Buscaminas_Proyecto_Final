@@ -64,6 +64,10 @@ python main.py
 ```
 
 ## Proximos pasos (Mejoras)
+  - Agregar una interfaz
+  - Agregar animaciones de bandera y bomba
+  - Dejar de usar la consola para pedir coordenadas y cambiar a un sistema donde se use el mouse por medio de la interfaz
+  - Revelar un area grande en el primer movimiento
 
 
 
